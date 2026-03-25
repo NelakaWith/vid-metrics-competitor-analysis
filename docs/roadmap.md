@@ -8,7 +8,6 @@
 
 - Initialize Next.js 14+ (App Router), TypeScript, and Tailwind CSS
 - Install Shadcn/UI components (Card, Button, Input, Table, Badge)
-- Setup Lucide-React for iconography
 
 ### API Integration Layer
 
