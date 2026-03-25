@@ -28,6 +28,7 @@ import {
   resolveDateCutoff,
   type DateRangePreset,
 } from "@/app/lib/youtube-api";
+import { enrichVideos } from "@/app/lib/scoring";
 
 const VALID_DATE_RANGES: DateRangePreset[] = [
   "this_month",
@@ -78,15 +79,17 @@ export async function POST(request: NextRequest) {
     );
 
     // Step 5 — Batch-fetch metrics for all retrieved videos
-    const videos = await fetchVideoMetrics(videoIds);
+    const rawVideos = await fetchVideoMetrics(videoIds);
 
-    return Response.json({
-      channel: channelInfo,
-      videos,
-      // Echo back what was used so the UI can display it
+    // Step 6 — Enrich with performance scores, engagement rates, trending flags
+    const result = enrichVideos(
+      channelInfo,
+      rawVideos,
       dateRange,
-      publishedAfter: publishedAfter.toISOString(),
-    });
+      publishedAfter.toISOString(),
+    );
+
+    return Response.json(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error.";
 

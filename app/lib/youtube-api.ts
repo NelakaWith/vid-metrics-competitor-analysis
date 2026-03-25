@@ -12,30 +12,9 @@
  */
 
 import { ParsedChannel } from "./youtube-url-parser";
+import type { ChannelInfo, VideoMetrics } from "./types";
 
 const API_BASE = "https://www.googleapis.com/youtube/v3";
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-export interface ChannelInfo {
-  channelId: string;
-  title: string;
-  subscriberCount: number;
-  /** Playlist ID containing all uploaded videos ("UU…") */
-  uploadsPlaylistId: string;
-}
-
-export interface VideoMetrics {
-  videoId: string;
-  title: string;
-  publishedAt: string;
-  thumbnailUrl: string;
-  viewCount: number;
-  likeCount: number;
-  commentCount: number;
-  /** ISO 8601 duration string, e.g. "PT14M32S" */
-  duration: string;
-}
 
 // ── Internal helpers ──────────────────────────────────────────────────────────
 
