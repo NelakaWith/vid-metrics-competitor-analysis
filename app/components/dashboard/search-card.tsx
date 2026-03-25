@@ -1,7 +1,11 @@
 "use client";
 
 import { HugeiconsIcon } from "@hugeicons/react";
-import { YoutubeIcon, Search01Icon } from "@hugeicons/core-free-icons";
+import {
+  YoutubeIcon,
+  Search01Icon,
+  Cancel01Icon,
+} from "@hugeicons/core-free-icons";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -60,12 +64,26 @@ export function SearchCard({
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           />
           <Input
-            className="pl-9"
+            className="pl-9 pr-8"
             placeholder="https://youtube.com/@MrBeast"
             value={channelUrl}
             onChange={(e) => onChannelUrlChange(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && onSubmit()}
           />
+          {channelUrl && (
+            <button
+              onClick={() => onChannelUrlChange("")}
+              aria-label="Clear"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full bg-muted p-0.5 text-muted-foreground transition-colors hover:bg-foreground/15 hover:text-foreground"
+            >
+              <HugeiconsIcon
+                icon={Cancel01Icon}
+                size={14}
+                color="currentColor"
+                strokeWidth={1.5}
+              />
+            </button>
+          )}
         </div>
         <Button
           onClick={onSubmit}
