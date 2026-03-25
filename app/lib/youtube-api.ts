@@ -4,7 +4,7 @@
  * Implements the four-step chain described in the roadmap:
  *  1. search.list        → resolve Handle / custom name → Channel ID
  *  2. channels.list      → subscriber count + "uploads" playlist ID
- *  3. playlistItems.list → latest 50 video IDs from the uploads playlist
+ *  3. playlistItems.list → video IDs published after a given cutoff date
  *  4. videos.list        → per-video metrics (views, likes, comments, duration)
  *
  * Every function throws a descriptive Error on API failure so the
@@ -144,27 +144,77 @@ export async function fetchChannelInfo(
   };
 }
 
-// ── Step 3: latest video IDs ──────────────────────────────────────────────────
+// ── Date-range helpers ───────────────────────────────────────────────────────
+
+export type DateRangePreset = "this_month" | "last_30_days" | "last_7_days";
 
 /**
- * Retrieve up to 50 video IDs from the channel's uploads playlist.
- * Results are ordered by most-recently-published (YouTube's default).
+ * Returns the UTC midnight Date that marks the start of the requested window.
+ *  - "this_month"   → 1st of the current calendar month, 00:00 UTC
+ *  - "last_30_days" → exactly 30 days ago, 00:00 UTC
+ *  - "last_7_days"  → exactly 7 days ago, 00:00 UTC
  */
-export async function fetchLatestVideoIds(
+export function resolveDateCutoff(preset: DateRangePreset): Date {
+  const now = new Date();
+  if (preset === "this_month") {
+    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  }
+  const days = preset === "last_7_days" ? 7 : 30;
+  const cutoff = new Date(now);
+  cutoff.setUTCDate(cutoff.getUTCDate() - days);
+  cutoff.setUTCHours(0, 0, 0, 0);
+  return cutoff;
+}
+
+// ── Step 3: date-filtered video IDs ──────────────────────────────────────────
+
+type PlaylistPage = {
+  nextPageToken?: string;
+  items?: { contentDetails: { videoId: string; videoPublishedAt: string } }[];
+};
+
+/**
+ * Retrieve video IDs from the channel's uploads playlist that were published
+ * on or after `publishedAfter`.
+ *
+ * Strategy: playlist items are ordered newest-first. We fetch pages of 50 and
+ * stop as soon as we encounter a video older than the cutoff — no wasted quota.
+ * Cap at `maxVideos` (default 50) to protect against channels that post daily.
+ */
+export async function fetchVideoIdsSince(
   uploadsPlaylistId: string,
-  maxResults = 50,
+  publishedAfter: Date,
+  maxVideos = 50,
 ): Promise<string[]> {
-  const url = buildUrl("playlistItems", {
-    part: "contentDetails",
-    playlistId: uploadsPlaylistId,
-    maxResults: String(Math.min(maxResults, 50)), // API cap is 50
-  });
+  const ids: string[] = [];
+  let pageToken: string | undefined;
 
-  const data = await apiFetch<{
-    items?: { contentDetails: { videoId: string } }[];
-  }>(url);
+  do {
+    const params: Record<string, string> = {
+      part: "contentDetails",
+      playlistId: uploadsPlaylistId,
+      maxResults: "50", // always fetch full pages; we filter below
+    };
+    if (pageToken) params.pageToken = pageToken;
 
-  return (data.items ?? []).map((item) => item.contentDetails.videoId);
+    const page = await apiFetch<PlaylistPage>(
+      buildUrl("playlistItems", params),
+    );
+
+    for (const item of page.items ?? []) {
+      const published = new Date(item.contentDetails.videoPublishedAt);
+      if (published < publishedAfter) {
+        // All subsequent items will be even older — stop immediately
+        return ids;
+      }
+      ids.push(item.contentDetails.videoId);
+      if (ids.length >= maxVideos) return ids;
+    }
+
+    pageToken = page.nextPageToken;
+  } while (pageToken);
+
+  return ids;
 }
 
 // ── Step 4: per-video metrics ─────────────────────────────────────────────────
