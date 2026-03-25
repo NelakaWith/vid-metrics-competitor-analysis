@@ -74,13 +74,14 @@ export default function Home() {
           <div className="flex flex-col gap-6">
             <ChannelInfoBar
               channel={result.channel}
+              videos={result.videos}
               videoCount={result.videos.length}
               dateRange={result.dateRange as DateRange}
             />
 
             <StatsRow stats={result.stats} channel={result.channel} />
 
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:items-stretch">
               <div className="lg:col-span-3">
                 <ViewsBarChart videos={result.videos} />
               </div>

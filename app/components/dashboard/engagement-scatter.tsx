@@ -79,7 +79,7 @@ export function EngagementScatter({ videos }: Props) {
     videos.reduce((s, v) => s + v.engagementRate, 0) / (videos.length || 1);
 
   return (
-    <Card className="border-border/60">
+    <Card className="flex h-full flex-col border-border/60">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
           Video Length vs. Engagement
@@ -88,8 +88,8 @@ export function EngagementScatter({ videos }: Props) {
           Shorts (&lt;60s) excluded
         </p>
       </CardHeader>
-      <CardContent className="p-0 pb-4">
-        <ResponsiveContainer width="100%" height={260}>
+      <CardContent className="flex flex-1 flex-col p-0 pb-4">
+        <ResponsiveContainer width="100%" height={280}>
           <ScatterChart margin={{ top: 8, right: 20, left: 8, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis

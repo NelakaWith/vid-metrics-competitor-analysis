@@ -1,16 +1,25 @@
+"use client";
+
 import { HugeiconsIcon } from "@hugeicons/react";
-import { YoutubeIcon } from "@hugeicons/core-free-icons";
+import { YoutubeIcon, Csv01Icon } from "@hugeicons/core-free-icons";
 import { fmtCount } from "@/app/lib/format";
-import type { ChannelInfo } from "@/app/lib/types";
+import { exportVideosCsv } from "@/app/lib/export-csv";
+import type { ChannelInfo, EnrichedVideo } from "@/app/lib/types";
 import { DATE_RANGE_OPTIONS, type DateRange } from "./search-card";
 
 interface Props {
   channel: ChannelInfo;
+  videos: EnrichedVideo[];
   videoCount: number;
   dateRange: DateRange;
 }
 
-export function ChannelInfoBar({ channel, videoCount, dateRange }: Props) {
+export function ChannelInfoBar({
+  channel,
+  videos,
+  videoCount,
+  dateRange,
+}: Props) {
   const rangeLabel =
     DATE_RANGE_OPTIONS.find((o) => o.key === dateRange)?.label ?? dateRange;
 
@@ -29,6 +38,19 @@ export function ChannelInfoBar({ channel, videoCount, dateRange }: Props) {
           analysed · {rangeLabel}
         </p>
       </div>
+      <button
+        onClick={() => exportVideosCsv(videos, channel.title)}
+        aria-label="Export CSV"
+        className="ml-auto flex items-center gap-1.5 rounded-lg border border-border/60 px-2.5 py-1.5 text-xs text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+      >
+        <HugeiconsIcon
+          icon={Csv01Icon}
+          size={13}
+          color="currentColor"
+          strokeWidth={1.5}
+        />
+        Export CSV
+      </button>
     </div>
   );
 }

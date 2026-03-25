@@ -63,14 +63,14 @@ export function ViewsBarChart({ videos }: Props) {
     chartData.reduce((s, v) => s + v.views, 0) / (chartData.length || 1);
 
   return (
-    <Card className="border-border/60">
+    <Card className="flex h-full flex-col border-border/60">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
           Views per Video
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0 pb-4">
-        <ResponsiveContainer width="100%" height={260}>
+      <CardContent className="flex flex-1 flex-col p-0 pb-4">
+        <ResponsiveContainer width="100%" height={280}>
           <BarChart
             data={chartData}
             margin={{ top: 8, right: 16, left: 8, bottom: 60 }}
