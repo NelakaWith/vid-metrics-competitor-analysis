@@ -28,7 +28,9 @@ export default function Home() {
     const requestUrl =
       typeof urlOverride === "string" ? urlOverride.trim() : channelUrl.trim();
     const originalInput =
-      typeof displayInput === "string" ? displayInput.trim() : channelUrl.trim();
+      typeof displayInput === "string"
+        ? displayInput.trim()
+        : channelUrl.trim();
     if (!requestUrl) return;
     setLoading(true);
     setResult(null);
