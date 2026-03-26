@@ -86,7 +86,7 @@ export function SearchCard({
           )}
         </div>
         <Button
-          onClick={onSubmit}
+          onClick={() => onSubmit()}
           disabled={loading || !channelUrl.trim()}
           className="gap-1.5"
         >
