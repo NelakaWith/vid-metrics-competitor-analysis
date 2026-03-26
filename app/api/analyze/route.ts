@@ -89,7 +89,10 @@ export async function POST(request: NextRequest) {
       publishedAfter.toISOString(),
     );
 
-    return Response.json(result);
+    return Response.json({
+      ...result,
+      input: channelUrl,
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error.";
 

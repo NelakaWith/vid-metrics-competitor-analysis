@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AnalyticsUpIcon } from "@hugeicons/core-free-icons";
 import { Header } from "@/app/components/layout/header";
@@ -24,8 +24,12 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  async function handleAnalyze() {
-    if (!channelUrl.trim()) return;
+  async function handleAnalyze(urlOverride?: string, displayInput?: string) {
+    const requestUrl =
+      typeof urlOverride === "string" ? urlOverride.trim() : channelUrl.trim();
+    const originalInput =
+      typeof displayInput === "string" ? displayInput.trim() : channelUrl.trim();
+    if (!requestUrl) return;
     setLoading(true);
     setResult(null);
     setError(null);
@@ -34,17 +38,41 @@ export default function Home() {
       const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ channelUrl: channelUrl.trim(), dateRange }),
+        body: JSON.stringify({ channelUrl: requestUrl, dateRange }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Request failed");
-      setResult(data as AnalysisResult);
+      const analysisResult = {
+        ...(data as AnalysisResult),
+        input: originalInput || (data as AnalysisResult).input,
+      };
+      setResult(analysisResult);
+      setChannelUrl(analysisResult.input);
+      const nextParams = new URLSearchParams();
+      nextParams.set("channel", analysisResult.channel.channelId);
+      nextParams.set("input", analysisResult.input);
+      window.history.replaceState(null, "", `/?${nextParams.toString()}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const channelId = params.get("channel");
+    const input = params.get("input");
+    if (channelId) {
+      if (input) {
+        setChannelUrl(input);
+        handleAnalyze(channelId, input);
+        return;
+      }
+      handleAnalyze(channelId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="min-h-screen bg-background font-sans">

@@ -97,10 +97,10 @@ export function VideoList({ videos }: Props) {
             href={`https://youtube.com/watch?v=${video.videoId}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex gap-4 rounded-xl border border-border/60 bg-card p-3 transition-colors hover:border-border hover:bg-card/80"
+            className="group relative flex gap-4 rounded-xl border border-border/60 bg-card p-3 transition-colors hover:border-border hover:bg-card/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
             {/* Thumbnail */}
-            <div className="relative shrink-0 overflow-hidden rounded-lg">
+            <div className="group/thumb relative shrink-0 overflow-visible rounded-lg">
               <Image
                 src={video.thumbnailUrl}
                 alt={video.title}
@@ -113,6 +113,24 @@ export function VideoList({ videos }: Props) {
               <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 text-[10px] font-medium text-white">
                 {fmtDuration(video.durationSeconds)}
               </span>
+              <div className="pointer-events-none absolute left-0 top-0 z-20 hidden -translate-y-2 opacity-0 transition-all duration-200 ease-out md:block md:group-hover/thumb:translate-y-0 md:group-hover/thumb:opacity-100 md:group-focus-visible/thumb:translate-y-0 md:group-focus-visible/thumb:opacity-100">
+                <div className="w-80 overflow-hidden rounded-2xl border border-white/15 bg-slate-950/95 shadow-2xl ring-1 ring-black/30 backdrop-blur-sm">
+                  <div className="relative aspect-video w-full">
+                    <Image
+                      src={video.thumbnailUrl}
+                      alt={`${video.title} thumbnail preview`}
+                      fill
+                      className="object-cover"
+                      sizes="320px"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="flex items-center justify-between gap-3 border-t border-white/10 px-3 py-2 text-[11px] text-white/80">
+                    <span className="truncate">Thumbnail Preview</span>
+                    <span>{fmtCount(video.viewCount)} views</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Info */}

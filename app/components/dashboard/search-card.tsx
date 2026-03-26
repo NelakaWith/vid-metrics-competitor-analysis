@@ -22,7 +22,7 @@ interface Props {
   onChannelUrlChange: (url: string) => void;
   dateRange: DateRange;
   onDateRangeChange: (range: DateRange) => void;
-  onSubmit: () => void;
+  onSubmit: (urlOverride?: string) => void;
   loading: boolean;
 }
 
