@@ -59,8 +59,8 @@ export interface EnrichedVideo extends VideoMetrics {
 export interface AnalysisResult {
   channel: ChannelInfo;
   videos: EnrichedVideo[];
-  /** Original user input used to start the analysis */
-  input: string;
+  /** Original user input used to start the analysis — populated by the API route, not scoring.ts */
+  input?: string;
   /** Preset used for this analysis */
   dateRange: string;
   /** ISO 8601 timestamp of the earliest video included */

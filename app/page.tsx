@@ -44,15 +44,13 @@ export default function Home() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Request failed");
-      const analysisResult = {
-        ...(data as AnalysisResult),
-        input: originalInput || (data as AnalysisResult).input,
-      };
+      const analysisResult = data as AnalysisResult;
+      const resolvedInput = originalInput || analysisResult.input || requestUrl;
       setResult(analysisResult);
-      setChannelUrl(analysisResult.input);
+      setChannelUrl(resolvedInput);
       const nextParams = new URLSearchParams();
       nextParams.set("channel", analysisResult.channel.channelId);
-      nextParams.set("input", analysisResult.input);
+      nextParams.set("input", resolvedInput);
       window.history.replaceState(null, "", `/?${nextParams.toString()}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
