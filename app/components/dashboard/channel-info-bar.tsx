@@ -38,7 +38,7 @@ export function ChannelInfoBar({
   }
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-border/60 bg-card px-5 py-3">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-border/60 bg-card px-5 py-3">
       <HugeiconsIcon
         icon={YoutubeIcon}
         size={20}

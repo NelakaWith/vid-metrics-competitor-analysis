@@ -37,7 +37,7 @@ export function SearchCard({
   return (
     <div className="mx-auto mb-10 max-w-2xl rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
       {/* Date range pills */}
-      <div className="mb-4 flex gap-2">
+      <div className="mb-4 flex flex-col sm:flex-row gap-2">
         {DATE_RANGE_OPTIONS.map((opt) => (
           <button
             key={opt.key}
@@ -54,7 +54,7 @@ export function SearchCard({
       </div>
 
       {/* URL input + button */}
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
           <HugeiconsIcon
             icon={YoutubeIcon}

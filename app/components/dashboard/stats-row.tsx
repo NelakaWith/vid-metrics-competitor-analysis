@@ -48,7 +48,7 @@ export function StatsRow({ stats, channel }: Props) {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:grid-cols-4">
       {items.map((item) => (
         <Card key={item.label} className="border-border/60">
           <CardContent className="flex items-start gap-3 p-5">
