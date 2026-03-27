@@ -97,7 +97,7 @@ export function VideoList({ videos }: Props) {
             href={`https://youtube.com/watch?v=${video.videoId}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex gap-4 rounded-xl border border-border/60 bg-card p-3 transition-colors hover:border-border hover:bg-card/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="group relative flex flex-col gap-3 rounded-xl border border-border/60 bg-card p-3 transition-colors hover:border-border hover:bg-card/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 sm:flex-row sm:gap-4"
           >
             {/* Thumbnail */}
             <div className="group/thumb relative shrink-0 overflow-visible rounded-lg">
@@ -106,7 +106,7 @@ export function VideoList({ videos }: Props) {
                 alt={video.title}
                 width={160}
                 height={90}
-                className="h-22.5 w-40 object-cover transition-transform duration-200 group-hover:scale-105"
+                className="h-auto w-full rounded-lg object-cover transition-transform duration-200 group-hover:scale-105 sm:h-22.5 sm:w-40"
                 unoptimized
               />
               {/* Duration overlay */}
