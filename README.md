@@ -1,5 +1,7 @@
 # VidMetrics — YouTube Competitor Analyzer
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/aaa938e3-64d8-48aa-8b35-9873ecec446d/deploy-status)](https://app.netlify.com/projects/vid-metrics-competitor-analysis/deploys)
+
 Paste any YouTube channel URL and instantly see which videos are crushing it. Built for content teams who need fast, data-driven competitor intelligence without leaving the browser.
 
 ---
@@ -61,6 +63,10 @@ app/
   page.tsx                        # Root page — state + layout composition
 docs/
   roadmap.md                      # Phased build plan
+  submission/
+    index.md                      # Written submission table of contents
+    build-breakdown.md            # Time, tools, AI usage, what was automated
+    product-thinking.md           # What's missing, v2 vision, beyond the brief
 ```
 
 ---
@@ -174,6 +180,14 @@ A video exactly at the channel average scores **50**. A video at 2× average on 
 
 ---
 
+## Docs
+
+| File                                                                       | Description                                 |
+| -------------------------------------------------------------------------- | ------------------------------------------- |
+| [docs/roadmap.md](docs/roadmap.md)                                         | Phased build plan                           |
+| [docs/submission/build-breakdown.md](docs/submission/build-breakdown.md)   | Time, tools, AI usage, what was automated   |
+| [docs/submission/product-thinking.md](docs/submission/product-thinking.md) | What's missing, v2 vision, beyond the brief |
+
 ## Roadmap
 
 See [docs/roadmap.md](docs/roadmap.md) for the full phased plan.
@@ -181,4 +195,4 @@ See [docs/roadmap.md](docs/roadmap.md) for the full phased plan.
 - **Phase 1** ✅ — API integration layer (URL parser, YouTube API chain, `/api/analyze` route)
 - **Phase 2** ✅ — Enterprise SaaS dashboard (charts, video cards, trending badges)
 - **Phase 3** ✅ — CSV export, shareable links, AI content summary
-- **Phase 4** — Docs and demo
+- **Phase 4** ✅ — Docs and demo
